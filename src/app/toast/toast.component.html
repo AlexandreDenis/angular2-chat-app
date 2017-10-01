@@ -1,0 +1,6 @@
+<div id="snackbar" 
+    [class.show]="showToast === true"
+    [class.info]="isInfoMessage()"
+    [class.error]="isErrorMessage()">
+    {{info.message}}
+</div>

@@ -5,9 +5,11 @@ import { FormsModule }        from '@angular/forms';
 import { AppComponent }       from './app.component';
 import { LoginComponent }     from './authentification/login/login.component';
 import { SigninComponent }    from './authentification/signin/signin.component';
+import { ToastComponent }     from './toast/toast.component';
 
 import { CacheService }       from './dataaccess/cache.service';
 import { AuthService }        from './authentification/auth.service';
+import { ToastService }       from './toast/toast.service';
 
 import { AppRoutingModule }   from './routing/app-routing.module';
 
@@ -15,7 +17,8 @@ import { AppRoutingModule }   from './routing/app-routing.module';
   declarations: [
     AppComponent,
     LoginComponent,
-    SigninComponent
+    SigninComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { AppRoutingModule }   from './routing/app-routing.module';
   ],
   providers: [ 
     CacheService, 
-    AuthService 
+    AuthService,
+    ToastService
   ],
   bootstrap: [AppComponent]
 })
