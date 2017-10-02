@@ -13,3 +13,7 @@
 button:hover {
     cursor: pointer;
 }
+
+button[disabled]:hover {
+    cursor: not-allowed;
+}

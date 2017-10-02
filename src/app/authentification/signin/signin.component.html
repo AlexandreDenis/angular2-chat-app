@@ -1,22 +1,41 @@
 <div class="form-container">
-    <form>
+    <form [formGroup]="formGroup" (ngSubmit)="onSigninButtonClicked()">
         <div class="form-group">
-                <label for="firstNameInput">First name</label>
-                <input type="text" id="firstNameInput" name="firstName" class="form-control" placeholder="Enter first name" [(ngModel)]="userInfo.firstName">
+                <label for="firstNameInput">First name*</label>
+                <input type="text" id="firstNameInput" name="firstName" class="form-control" placeholder="Enter first name" formControlName="firstNameInput" required>
+                <div *ngIf="firstNameInput.invalid && (firstNameInput.dirty || firstNameInput.touched)">
+                    <div *ngIf="firstNameInput.errors.required" class="alert alert-danger">First name is required</div>
+                    <div *ngIf="firstNameInput.errors.maxlength" class="alert alert-danger">First name length must be inferior or equal to 32 characters</div>
+                    <div *ngIf="firstNameInput.errors.pattern" class="alert alert-danger">First name must only contain letters</div>
+                </div>
         </div>
         <div class="form-group">
-                <label for="lastNameInput">Last name</label>
-                <input type="text" id="lastNameInput" name="lastName" class="form-control" placeholder="Enter last name" [(ngModel)]="userInfo.lastName">
+                <label for="lastNameInput">Last name*</label>
+                <input type="text" id="lastNameInput" name="lastName" class="form-control" placeholder="Enter last name" formControlName="lastNameInput" required>
+                <div *ngIf="lastNameInput.invalid && (lastNameInput.dirty || lastNameInput.touched)">
+                    <div *ngIf="lastNameInput.errors.required" class="alert alert-danger">Last name is required</div>
+                    <div *ngIf="lastNameInput.errors.maxlength" class="alert alert-danger">Last name length must be inferior or equal to 32 characters</div>
+                    <div *ngIf="lastNameInput.errors.pattern" class="alert alert-danger">Last name must only contain letters</div>
+                </div>
         </div>
         <div class="form-group">
-            <label for="usernameInput">Username</label>
-            <input type="text" id="usernameInput" name="username" class="form-control" placeholder="Enter username" [(ngModel)]="userInfo.username">
+            <label for="usernameInput">Username*</label>
+            <input type="text" id="usernameInput" name="username" class="form-control" placeholder="Enter username" formControlName="usernameInput" required>
+            <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)">
+                <div *ngIf="usernameInput.errors.required" class="alert alert-danger">Last name is required</div>
+                <div *ngIf="usernameInput.errors.maxlength" class="alert alert-danger">Last name length must be inferior or equal to 16 characters</div>
+                <div *ngIf="usernameInput.errors.pattern" class="alert alert-danger">Last name must only contain letters or numbers</div>
+            </div>
         </div>
         <div class="form-group">
-            <label for="passwordInput">Password</label>
-            <input type="password" id="passwordInput" name="password" class="form-control" placeholder="Enter password" [(ngModel)]="userInfo.password">
+            <label for="passwordInput">Password*</label>
+            <input type="password" id="passwordInput" name="password" class="form-control" placeholder="Enter password" formControlName="passwordInput" required>
+            <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)">
+                <div *ngIf="passwordInput.errors.required" class="alert alert-danger">Password is required</div>
+                <div *ngIf="passwordInput.errors.maxlength" class="alert alert-danger">Password length must be inferior or equal to 64 characters</div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary" (click)="onSigninButtonClicked()">Sign in</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!formGroup.valid">Sign in</button>
         <a routerLink="/login">Already an account? Log in !</a>
     </form>
 </div>

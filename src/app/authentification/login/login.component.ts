@@ -1,4 +1,8 @@
-import { Component }    from '@angular/core';
+import { Component,
+         OnInit }           from '@angular/core';
+import { FormGroup,
+         FormControl,
+         Validators }       from '@angular/forms';
 
 import { CacheService }     from '../../dataaccess/cache.service';
 
@@ -7,22 +11,35 @@ import { CacheService }     from '../../dataaccess/cache.service';
     templateUrl: './login.component.html'
 })
 export class LoginComponent {
-    credentials = {
-        username: '',
-        password: ''
-    };
+    formGroup: FormGroup;
 
     constructor(
         private cache: CacheService
-    ) {
+    ) {}
 
-    }
+    ngOnInit(): void {
+        this.formGroup = new FormGroup({
+            'usernameInput': new FormControl(null, [
+                Validators.required,
+                Validators.maxLength(16),
+                Validators.pattern(new RegExp("^[a-zA-Z0-9]+$"))
+            ]),
+            'passwordInput': new FormControl(null, [
+                Validators.required,
+                Validators.maxLength(64)
+            ])
+        });
+    };
+
+    // getters
+    get usernameInput()     {  return this.formGroup.get('usernameInput');  }
+    get passwordInput()     {  return this.formGroup.get('passwordInput');  }
 
     onLoginButtonClicked(): void {
         // TODO
         console.log("Authentication requested");
 
-        console.log("username", this.credentials.username);
-        console.log("password", this.credentials.password);
+        console.log("username", this.usernameInput.value);
+        console.log("password", this.passwordInput.value);
     };
 }
