@@ -3,7 +3,7 @@ import { Component,
 import { Router }                   from '@angular/router';
 import { FormGroup,
          FormControl,
-         Validators }      from '@angular/forms';
+         Validators }               from '@angular/forms';
 
 import { User }                     from '../../dataaccess/model/user';
 import { AuthService }              from '../auth.service';

@@ -19,6 +19,20 @@ export class AuthService {
         // encrypt the password
         userInfo.password   = this.encryption.encrypt(userInfo.password);
 
+        // ask cache saving
         return this.cache.createUser(userInfo);
     };
-}
+
+    tryLogin(username: string, password: string) {
+        let user    = this.cache.getUser(username);
+
+        if(user != undefined) {
+            let encryptedPwd    = this.encryption.encrypt(password);
+            if(user.password == encryptedPwd) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+} 

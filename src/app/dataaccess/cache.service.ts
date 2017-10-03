@@ -77,5 +77,17 @@ export class CacheService {
         }
 
         return res
-    }
+    };
+    getUser(username: string): User{
+        let user:User = null;
+
+        for(let currUser of this.users) {
+            if(currUser.username === username) {
+                user    = currUser;
+                break;
+            }
+        }
+
+        return user;
+    };
 }

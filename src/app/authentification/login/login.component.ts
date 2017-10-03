@@ -3,8 +3,12 @@ import { Component,
 import { FormGroup,
          FormControl,
          Validators }       from '@angular/forms';
+import { Router }           from '@angular/router';
 
 import { CacheService }     from '../../dataaccess/cache.service';
+import { AuthService }      from '../auth.service';
+import { ToastService }     from '../../toast/toast.service';
+import { ToastType }        from '../../enum';
 
 @Component({
     selector: 'login',
@@ -14,7 +18,10 @@ export class LoginComponent {
     formGroup: FormGroup;
 
     constructor(
-        private cache: CacheService
+        private cache:          CacheService,
+        private authService:    AuthService,
+        private toastService:   ToastService,
+        private router:         Router
     ) {}
 
     ngOnInit(): void {
@@ -36,10 +43,26 @@ export class LoginComponent {
     get passwordInput()     {  return this.formGroup.get('passwordInput');  }
 
     onLoginButtonClicked(): void {
-        // TODO
         console.log("Authentication requested");
 
-        console.log("username", this.usernameInput.value);
-        console.log("password", this.passwordInput.value);
+        let username    = this.usernameInput.value,
+            password    = this.passwordInput.value;
+        // try to login
+        if(this.authService.tryLogin(username,password)) {
+            // display a success toast
+            this.toastService.requestToastDisplay(
+                "Connexion succeeded",
+                ToastType.INFO
+            );
+
+            // open the chat
+            this.router.navigate(['/main']);
+        } else {
+            // display an error toast
+            this.toastService.requestToastDisplay(
+                "Connexion failed: bad login/password",
+                ToastType.ERROR
+            );
+        }
     };
 }

@@ -7,6 +7,7 @@ import { AppComponent }         from './app.component';
 import { LoginComponent }       from './authentification/login/login.component';
 import { SigninComponent }      from './authentification/signin/signin.component';
 import { ToastComponent }       from './toast/toast.component';
+import { MainComponent }        from './chat/main/main.component';
 
 import { CacheService }         from './dataaccess/cache.service';
 import { AuthService }          from './authentification/auth.service';
@@ -20,7 +21,8 @@ import { AppRoutingModule }     from './routing/app-routing.module';
     AppComponent,
     LoginComponent,
     SigninComponent,
-    ToastComponent
+    ToastComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
