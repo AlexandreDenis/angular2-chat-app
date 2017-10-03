@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable }   from '@angular/core';
 
-import { User } from './model/user';
+import { User }         from './model/user';
+
+import { addEvent }     from '../lib';
 
 const prefixKey: string     = "angular2-chat-app/";
 const STORAGE_KEYS = {
@@ -37,6 +39,11 @@ export class CacheService {
 
         //let usernames = this.users.map(user => user.username);
         //console.log("Registered users:", this.users);
+
+        // add listener to detect cache modifications        
+        addEvent(window, 'storage', function (event) {
+            console.log(event.newValue);
+        });
     };
 
     getUsers(): User[] {
@@ -89,5 +96,10 @@ export class CacheService {
         }
 
         return user;
+    };
+    test = 0;
+    sendMessage(msg: string) {
+        this.storage.setItem("test", "this is a test " + this.test);
+        ++this.test;
     };
 }

@@ -13,6 +13,7 @@ import { CacheService }         from './dataaccess/cache.service';
 import { AuthService }          from './authentification/auth.service';
 import { ToastService }         from './toast/toast.service';
 import { EncryptionService }    from './authentification/encryption.service';
+import { Messenger }            from './chat/messenger.service';
 
 import { AppRoutingModule }     from './routing/app-routing.module';
 
@@ -34,7 +35,8 @@ import { AppRoutingModule }     from './routing/app-routing.module';
     CacheService, 
     AuthService,
     ToastService,
-    EncryptionService
+    EncryptionService,
+    Messenger
   ],
   bootstrap: [AppComponent]
 })
