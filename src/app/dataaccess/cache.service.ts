@@ -36,7 +36,7 @@ export class CacheService {
         this.users = JSON.parse(this.storage.getItem(STORAGE_KEYS.USERS));
 
         //let usernames = this.users.map(user => user.username);
-        console.log("Registered users:", this.users);
+        //console.log("Registered users:", this.users);
     };
 
     getUsers(): User[] {

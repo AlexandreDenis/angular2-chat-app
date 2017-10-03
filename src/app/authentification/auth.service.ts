@@ -6,6 +6,8 @@ import { EncryptionService }    from './encryption.service';
 
 @Injectable()
 export class AuthService {
+    isLoggedIn  = false;
+
     constructor(
         private cache: CacheService,
         private encryption: EncryptionService
@@ -24,15 +26,20 @@ export class AuthService {
     };
 
     tryLogin(username: string, password: string) {
-        let user    = this.cache.getUser(username);
+        this.isLoggedIn     = false;
+        let user            = this.cache.getUser(username);
 
         if(user != undefined) {
             let encryptedPwd    = this.encryption.encrypt(password);
             if(user.password == encryptedPwd) {
-                return true;
+                this.isLoggedIn     = true;
             }
         }
 
-        return false;
+        return this.isLoggedIn;
     };
+
+    logout(){
+        this.isLoggedIn     = false;
+    }
 } 
