@@ -1,12 +1,14 @@
-import { Injectable }       from '@angular/core';
+import { Injectable }           from '@angular/core';
 
-import { User }             from '../dataaccess/model/user';
-import { CacheService}      from '../dataaccess/cache.service';
+import { User }                 from '../dataaccess/model/user';
+import { CacheService }         from '../dataaccess/cache.service';
+import { EncryptionService }    from './encryption.service';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private cache: CacheService
+        private cache: CacheService,
+        private encryption: EncryptionService
     ) {};
 
     isUserAlreadyExisting(username: string): boolean {
@@ -14,6 +16,9 @@ export class AuthService {
     };
 
     createUser(userInfo: User) {
+        // encrypt the password
+        userInfo.password   = this.encryption.encrypt(userInfo.password);
+
         return this.cache.createUser(userInfo);
     };
 }
