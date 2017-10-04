@@ -4,6 +4,9 @@
 <!-- Send form -->
 <form [formGroup]="formGroup" (ngSubmit)="onSendButtonClicked()" id="send-form">
     <div class="input-group">
+        <span class="input-group-btn">
+            <button class="btn" type="button" (click)="onLogoutButtonClicked()"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+        </span>
         <input type="text"  id="messageInput" name="message" class="form-control" placeholder="Enter your message..." aria-label="Enter your message..." maxlength="{{maxSize}}" formControlName="messageInput">
         <span class="input-group-btn">
             <button class="btn btn-primary" type="submit" [disabled]="!formGroup.valid">Send</button>

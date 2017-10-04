@@ -3,9 +3,11 @@ import { Component,
 import { FormGroup,
          FormControl,
          Validators }   from '@angular/forms';
+import { Router }       from '@angular/router';
 
 import { Messenger }    from '../messenger.service';
 import { ToastService } from '../../toast/toast.service';
+import { AuthService }  from '../../authentification/auth.service';
 
 import { ToastType }    from '../../enum';
 
@@ -14,12 +16,15 @@ import { ToastType }    from '../../enum';
   templateUrl: './main.component.html'
 })
 export class MainComponent {
+
     formGroup:  FormGroup;
-    maxSize:    number      = 64;   // max size for messages
+    maxSize:    number      = 128;   // max size for messages
 
     constructor(
         private messenger:      Messenger,
-        private toastService:   ToastService
+        private toastService:   ToastService,
+        private authService:    AuthService,
+        private router:         Router
     ) {};
 
     ngOnInit(): void {
@@ -46,5 +51,10 @@ export class MainComponent {
                 ToastType.ERROR
             );
         }
+    };
+
+    onLogoutButtonClicked() {
+        this.authService.logout();
+        this.router.navigate(["/login"]);
     };
 }
