@@ -12,6 +12,7 @@ main {
 
 #message-box {
     height: calc(100% - 38px);
+    overflow-y: auto;
 }
 
 .form-container > form {

@@ -1,0 +1,24 @@
+.message {
+    text-align: left;
+}
+
+.message > p {
+    display: inline-block;
+    background-color: #4080FF;
+    border-radius: 0.25rem;
+    padding: 5px 10px;
+    color: white;
+}
+
+.message.own-message {
+     text-align: right;
+}
+
+.message.own-message > p {
+    background-color: #F1F0F0;
+    color: #4B4F56;
+}
+
+.meta-part {
+    color: darkgrey;
+}

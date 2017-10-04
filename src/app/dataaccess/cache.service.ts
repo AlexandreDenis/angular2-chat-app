@@ -67,7 +67,6 @@ export class CacheService {
                     if(newValue != undefined && cnt > 0) {
                         let newMsg = newValue[cnt - 1];
                         this.messages.push(newMsg);
-                        console.log(this.messages);
                     }
                     break;
                 }
@@ -77,6 +76,9 @@ export class CacheService {
 
     getUsers(): User[] {
         return this.users;
+    };
+    getMessages(): Message[] {
+        return this.messages;
     };
     isUserAlreadyExisting(username: string): boolean {
         let res     = false;
@@ -117,17 +119,23 @@ export class CacheService {
 
         return res
     };
-    getUser(username: string): User{
+    private getUserFrom(key: string, value: any): User{
         let user:User = null;
 
         for(let currUser of this.users) {
-            if(currUser.username === username) {
+            if(currUser[key] === value) {
                 user    = currUser;
                 break;
             }
         }
 
         return user;
+    };
+    getUser(idUser: number): User{
+        return this.getUserFrom("id", idUser);
+    };
+    getUserFromName(username: string): User{
+        return this.getUserFrom("username", username);
     };
     sendMessage(msg: Message) {
         let success = false;
@@ -136,7 +144,6 @@ export class CacheService {
         if(!isAlreadyLocked) {
             this.messages.push(msg);
             this.storage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(this.messages));
-            console.log(this.messages);
             success = true;
         } else {
             console.error("Couldn't send message because of cache lock");

@@ -30,7 +30,7 @@ export class AuthService {
         this.isLoggedIn     = false;
         this.idUser         = -1;
         
-        let user            = this.cache.getUser(username);
+        let user            = this.cache.getUserFromName(username);
         if(user != undefined) {
             let encryptedPwd    = this.encryption.encrypt(password);
             if(user.password == encryptedPwd) {
