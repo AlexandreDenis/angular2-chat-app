@@ -5,6 +5,8 @@ import { Message }      from './model/message';
 
 import { addEvent }     from '../lib';
 
+import { Subject }      from 'rxjs/Subject';
+
 const prefixKey: string     = "angular2-chat-app/";
 const STORAGE_KEYS = {
     HAS_STORAGE:    prefixKey + "HAS_STORAGE",
@@ -21,6 +23,9 @@ export class CacheService {
     // data
     users:      User[]      = [];
     messages:   Message[]   = [];
+
+    // subjects
+    newMessageReceived      = new Subject();
 
     handleStorageEvent(event): void {
         let newValue    = JSON.parse(event.newValue);
@@ -43,6 +48,9 @@ export class CacheService {
                 if(newValue != undefined && cnt > 0) {
                     let newMsg = newValue[cnt - 1];
                     this.messages.push(newMsg);
+
+                    // notify the observers that a new message has been received
+                    this.newMessageReceived.next();
                 }
                 break;
             }
@@ -150,6 +158,10 @@ export class CacheService {
         if(!isAlreadyLocked) {
             this.messages.push(msg);
             this.storage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(this.messages));
+
+            // notify the observers that a new message has been sent
+            this.newMessageReceived.next();
+
             success = true;
         } else {
             console.error("Couldn't send message because of cache lock");

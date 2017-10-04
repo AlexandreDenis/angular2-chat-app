@@ -1,4 +1,4 @@
-<div id="message-box">
+<div #messagebox id="message-box">
     <div *ngFor="let msg of messages;" class="message" [class.own-message]="fromCurrentUser(msg.idUser)">
         <div class="meta-part author-part small" *ngIf="!fromCurrentUser(msg.idUser)">{{ getUsername(msg.idUser) }}</div>
         <div class="message-block">

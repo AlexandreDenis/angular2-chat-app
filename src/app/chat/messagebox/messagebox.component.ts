@@ -1,19 +1,24 @@
 import { Component,
-         OnInit }       from '@angular/core';
+         OnInit,
+         AfterViewChecked,
+         ViewChild,
+         ElementRef }           from '@angular/core';
 
-import { Message }      from '../../dataaccess/model/message';
+import { Message }              from '../../dataaccess/model/message';
 
-import { CacheService } from '../../dataaccess/cache.service';
-import { AuthService }  from '../../authentification/auth.service';
+import { CacheService }         from '../../dataaccess/cache.service';
+import { AuthService }          from '../../authentification/auth.service';
 
-import { timeConverter }    from '../../lib';
+import { timeConverter }        from '../../lib';
 
 @Component({
   selector: 'message-box',
   templateUrl: './messagebox.component.html',
   styleUrls: ['./messagebox.component.css']
 })
-export class MessageBoxComponent implements OnInit {
+export class MessageBoxComponent implements OnInit, AfterViewChecked {
+    @ViewChild('messagebox') messagebox: ElementRef;
+
     messages:   Message[]   = [];
 
     constructor(
@@ -24,6 +29,13 @@ export class MessageBoxComponent implements OnInit {
     ngOnInit(): void {
         // recover the messages from the cache
         this.messages   = this.cache.getMessages();
+
+        // scroll down when new message to display
+        this.cache.newMessageReceived.subscribe(() => this.scrollDown());
+    };
+
+    ngAfterViewChecked(): void {
+        this.scrollDown();
     };
 
     fromCurrentUser(idUser): boolean {
@@ -51,5 +63,11 @@ export class MessageBoxComponent implements OnInit {
         } else {
             msg.showDate = !msg.showDate;
         }
+    };
+
+    scrollDown() {
+        var elem =  this.messagebox;
+        var height = elem.nativeElement.scrollHeight;
+        elem.nativeElement.scrollTop = height;
     };
 }
