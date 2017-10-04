@@ -8,12 +8,14 @@ import { Router }       from '@angular/router';
 import { Messenger }    from '../messenger.service';
 import { ToastService } from '../../toast/toast.service';
 import { AuthService }  from '../../authentification/auth.service';
+import { CacheService } from '../../dataaccess/cache.service';
 
 import { ToastType }    from '../../enum';
 
 @Component({
-  selector: 'main',
-  templateUrl: './main.component.html'
+  selector:     'main',
+  templateUrl:  './main.component.html',
+  styleUrls:    ['./main.component.css']
 })
 export class MainComponent {
 
@@ -24,7 +26,8 @@ export class MainComponent {
         private messenger:      Messenger,
         private toastService:   ToastService,
         private authService:    AuthService,
-        private router:         Router
+        private router:         Router,
+        private cache:          CacheService
     ) {};
 
     ngOnInit(): void {
@@ -56,5 +59,16 @@ export class MainComponent {
     onLogoutButtonClicked() {
         this.authService.logout();
         this.router.navigate(["/login"]);
+    };
+
+    getCurrentUsername(): string {
+        let username = "";
+
+        let user = this.cache.getUser(this.authService.getCurrentUserId());
+        if(user != undefined) {
+            username    = user.username;
+        }
+
+        return username;
     };
 }

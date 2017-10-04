@@ -11,7 +11,7 @@ main {
 }
 
 #message-box {
-    height: calc(100% - 38px);
+    height: calc(100% - 78px);
     overflow-y: auto;
 }
 
