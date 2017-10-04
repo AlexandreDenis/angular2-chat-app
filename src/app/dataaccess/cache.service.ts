@@ -18,60 +18,66 @@ const STORAGE_KEYS = {
 export class CacheService {
     storage         = window.localStorage;
     
+    // data
     users:      User[]      = [];
     messages:   Message[]   = [];
+
+    handleStorageEvent(event): void {
+        let newValue    = JSON.parse(event.newValue);
+
+        switch(event.key) {
+            case STORAGE_KEYS.USERS: {
+                console.log("sync users");
+
+                let cnt         = newValue.length;
+                if(newValue != undefined && cnt > 0) {
+                    let newUser = newValue[cnt - 1];
+                    this.users.push(newUser);
+                }
+                break;
+            }
+            case STORAGE_KEYS.MESSAGES: {
+                console.log("sync messages");
+
+                let cnt         = newValue.length;
+                if(newValue != undefined && cnt > 0) {
+                    let newMsg = newValue[cnt - 1];
+                    this.messages.push(newMsg);
+                }
+                break;
+            }
+        }
+    };
+
+    private initStorageItem(name: string, defaultValue: string) {
+        let hasItem = this.storage.getItem(name);
+        if(!hasItem) {
+            console.log("Creation of the local storage item " + name);
+            this.storage.setItem(name, defaultValue);
+        }
+    };
 
     constructor() {
         // Clear the local storage for debug
         //window.localStorage.clear();
 
-        // init local storage if there isn't already one
-        let hasStorage  = this.storage.getItem(STORAGE_KEYS.HAS_STORAGE);
-
-        if(hasStorage !== 'true') {
-            console.log("Creation of storage keys...");
-            
-            this.storage.setItem(STORAGE_KEYS.HAS_STORAGE, "true");
-            this.storage.setItem(STORAGE_KEYS.WLOCK, "false");
-            this.storage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
-            this.storage.setItem(STORAGE_KEYS.NEXT_USER_ID, "0");
-            this.storage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify([]));
-        }
+        // init local storage items if needed
+        this.initStorageItem(STORAGE_KEYS.HAS_STORAGE, "true");
+        this.initStorageItem(STORAGE_KEYS.WLOCK, "false");
+        this.initStorageItem(STORAGE_KEYS.USERS, JSON.stringify([]));
+        this.initStorageItem(STORAGE_KEYS.NEXT_USER_ID, "0");
+        this.initStorageItem(STORAGE_KEYS.MESSAGES, JSON.stringify([]));
 
         // recovering of the storage
         this.users      = JSON.parse(this.storage.getItem(STORAGE_KEYS.USERS));
-        this.messages   = JSON.parse(this.storage.getItem(STORAGE_KEYS.MESSAGES));
+        this.messages   = JSON.parse(this.storage.getItem(STORAGE_KEYS.MESSAGES));      
 
         //let usernames = this.users.map(user => user.username);
         //console.log("Registered users:", this.users);
 
         // add listener to detect cache modifications
-        addEvent(window, 'storage', (event) => {
-            let newValue    = JSON.parse(event.newValue);
-
-            switch(event.key) {
-                case STORAGE_KEYS.USERS: {
-                    console.log("sync users");
-
-                    let cnt         = newValue.length;
-                    if(newValue != undefined && cnt > 0) {
-                        let newUser = newValue[cnt - 1];
-                        this.users.push(newUser);
-                    }
-                    break;
-                }
-                case STORAGE_KEYS.MESSAGES: {
-                    console.log("sync messages");
-
-                    let cnt         = newValue.length;
-                    if(newValue != undefined && cnt > 0) {
-                        let newMsg = newValue[cnt - 1];
-                        this.messages.push(newMsg);
-                    }
-                    break;
-                }
-            }
-        });
+        this.handleStorageEvent = this.handleStorageEvent.bind(this);
+        addEvent(window, 'storage', this.handleStorageEvent);
     };
 
     getUsers(): User[] {
