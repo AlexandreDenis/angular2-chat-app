@@ -22,7 +22,7 @@ export class LoginComponent {
         private authService:    AuthService,
         private toastService:   ToastService,
         private router:         Router
-    ) {}
+    ) {};
 
     ngOnInit(): void {
         this.formGroup = new FormGroup({

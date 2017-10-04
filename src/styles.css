@@ -2,6 +2,18 @@
     text-align: center;
 }
 
+app-root > .container {
+    height: 100vh;
+}
+
+main {
+    height: calc(100% - 52px);
+}
+
+#message-box {
+    height: calc(100% - 38px);
+}
+
 .form-container > form {
     position: absolute;
     top: 50%;

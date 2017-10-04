@@ -8,6 +8,7 @@ import { LoginComponent }       from './authentification/login/login.component';
 import { SigninComponent }      from './authentification/signin/signin.component';
 import { ToastComponent }       from './toast/toast.component';
 import { MainComponent }        from './chat/main/main.component';
+import { MessageBoxComponent }  from './chat/messagebox/messagebox.component';
 
 import { CacheService }         from './dataaccess/cache.service';
 import { AuthService }          from './authentification/auth.service';
@@ -23,7 +24,8 @@ import { AppRoutingModule }     from './routing/app-routing.module';
     LoginComponent,
     SigninComponent,
     ToastComponent,
-    MainComponent
+    MainComponent,
+    MessageBoxComponent
   ],
   imports: [
     BrowserModule,

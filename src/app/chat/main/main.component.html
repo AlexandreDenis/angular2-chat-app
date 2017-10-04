@@ -1,2 +1,12 @@
-This is the chat !
-<button type="button" class="btn btn-primary" (click)="onButtonClicked()">Send</button>
+<!-- Messages box -->
+<message-box></message-box>
+
+<!-- Send form -->
+<form [formGroup]="formGroup" (ngSubmit)="onSendButtonClicked()" id="send-form">
+    <div class="input-group">
+        <input type="text"  id="messageInput" name="message" class="form-control" placeholder="Enter your message..." aria-label="Enter your message..." maxlength="{{maxSize}}" formControlName="messageInput">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit" [disabled]="!formGroup.valid">Send</button>
+        </span>
+    </div>
+</form>

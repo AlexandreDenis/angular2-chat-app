@@ -1,6 +1,7 @@
 import { Injectable }   from '@angular/core';
 
 import { User }         from './model/user';
+import { Message }      from './model/message';
 
 import { addEvent }     from '../lib';
 
@@ -9,14 +10,16 @@ const STORAGE_KEYS = {
     HAS_STORAGE:    prefixKey + "HAS_STORAGE",
     WLOCK:          prefixKey + "WLOCK",
     USERS:          prefixKey + "USERS",
-    NEXT_USER_ID:   prefixKey + "NEXT_USER_ID"
+    NEXT_USER_ID:   prefixKey + "NEXT_USER_ID",
+    MESSAGES:       prefixKey + "MESSAGES"
 }
 
 @Injectable()
 export class CacheService {
     storage         = window.localStorage;
     
-    users: User[]   = [];
+    users:      User[]      = [];
+    messages:   Message[]   = [];
 
     constructor() {
         // Clear the local storage for debug
@@ -32,17 +35,43 @@ export class CacheService {
             this.storage.setItem(STORAGE_KEYS.WLOCK, "false");
             this.storage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
             this.storage.setItem(STORAGE_KEYS.NEXT_USER_ID, "0");
+            this.storage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify([]));
         }
 
         // recovering of the storage
-        this.users = JSON.parse(this.storage.getItem(STORAGE_KEYS.USERS));
+        this.users      = JSON.parse(this.storage.getItem(STORAGE_KEYS.USERS));
+        this.messages   = JSON.parse(this.storage.getItem(STORAGE_KEYS.MESSAGES));
 
         //let usernames = this.users.map(user => user.username);
         //console.log("Registered users:", this.users);
 
-        // add listener to detect cache modifications        
-        addEvent(window, 'storage', function (event) {
-            console.log(event.newValue);
+        // add listener to detect cache modifications
+        addEvent(window, 'storage', (event) => {
+            let newValue    = JSON.parse(event.newValue);
+
+            switch(event.key) {
+                case STORAGE_KEYS.USERS: {
+                    console.log("sync users");
+
+                    let cnt         = newValue.length;
+                    if(newValue != undefined && cnt > 0) {
+                        let newUser = newValue[cnt - 1];
+                        this.users.push(newUser);
+                    }
+                    break;
+                }
+                case STORAGE_KEYS.MESSAGES: {
+                    console.log("sync messages");
+
+                    let cnt         = newValue.length;
+                    if(newValue != undefined && cnt > 0) {
+                        let newMsg = newValue[cnt - 1];
+                        this.messages.push(newMsg);
+                        console.log(this.messages);
+                    }
+                    break;
+                }
+            }
         });
     };
 
@@ -75,6 +104,9 @@ export class CacheService {
             this.users.push(userInfo);
             this.storage.setItem(STORAGE_KEYS.USERS, JSON.stringify(this.users));
 
+            // update the next user ID
+            this.storage.setItem(STORAGE_KEYS.NEXT_USER_ID, ""+(userInfo.id+1));
+
             // unlock the write on the cache
             this.storage.setItem(STORAGE_KEYS.WLOCK, 'false');
 
@@ -97,9 +129,19 @@ export class CacheService {
 
         return user;
     };
-    test = 0;
-    sendMessage(msg: string) {
-        this.storage.setItem("test", "this is a test " + this.test);
-        ++this.test;
+    sendMessage(msg: Message) {
+        let success = false;
+        let isAlreadyLocked = (this.storage.getItem(STORAGE_KEYS.WLOCK) === 'true');
+
+        if(!isAlreadyLocked) {
+            this.messages.push(msg);
+            this.storage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(this.messages));
+            console.log(this.messages);
+            success = true;
+        } else {
+            console.error("Couldn't send message because of cache lock");
+        }
+
+        return success;
     };
 }
