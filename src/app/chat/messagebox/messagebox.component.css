@@ -2,7 +2,7 @@
     text-align: left;
 }
 
-.message > p {
+.message .message-block > p {
     display: inline-block;
     background-color: #4080FF;
     border-radius: 0.25rem;
@@ -14,11 +14,23 @@
      text-align: right;
 }
 
-.message.own-message > p {
+.message.own-message .message-block > p {
     background-color: #F1F0F0;
     color: #4B4F56;
 }
 
 .meta-part {
     color: darkgrey;
+}
+
+.message .message-block > p.text-part:hover {
+    cursor: pointer;
+}
+
+.message .message-block > p.text-part {
+    margin-bottom: 0rem;
+}
+
+.message .message-block {
+    margin-bottom: 1rem;
 }

@@ -1,6 +1,9 @@
 <div id="message-box">
-    <div *ngFor="let msg of messages" class="message" [class.own-message]="fromCurrentUser(msg.idUser)">
+    <div *ngFor="let msg of messages;" class="message" [class.own-message]="fromCurrentUser(msg.idUser)">
         <div class="meta-part author-part small" *ngIf="!fromCurrentUser(msg.idUser)">{{ getUsername(msg.idUser) }}</div>
-        <p class="text-part">{{ msg.text }}</p>
+        <div class="message-block">
+            <p class="text-part noselect" (click)="switchShowDate(msg)">{{ msg.text }}</p>
+            <div class="meta-part date-part small" *ngIf="msg.showDate">{{ displayDateFromTimestamp(msg.timestamp) }}</div>
+        </div>
     </div>
 </div>

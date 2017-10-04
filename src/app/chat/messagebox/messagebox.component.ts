@@ -6,6 +6,8 @@ import { Message }      from '../../dataaccess/model/message';
 import { CacheService } from '../../dataaccess/cache.service';
 import { AuthService }  from '../../authentification/auth.service';
 
+import { timeConverter }    from '../../lib';
+
 @Component({
   selector: 'message-box',
   templateUrl: './messagebox.component.html',
@@ -37,5 +39,17 @@ export class MessageBoxComponent implements OnInit {
         }
 
         return username;
+    };
+
+    displayDateFromTimestamp(timestamp): string {
+        return timeConverter(timestamp);
+    };
+
+    switchShowDate(msg) {
+        if(msg.showDate == undefined) {
+            msg.showDate = true;
+        } else {
+            msg.showDate = !msg.showDate;
+        }
     };
 }
