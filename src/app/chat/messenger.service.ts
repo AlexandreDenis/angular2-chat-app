@@ -13,12 +13,16 @@ export class Messenger {
     ) {};
 
     Send(msg: string) {
-        // create a Message instance
-        let newMsg: Message = {
-            idUser:     this.authService.getCurrentUserId(),
-            timestamp:  Date.now(),
-            text:       msg   
-        };
-        return this.cache.sendMessage(newMsg);
+        if(this.authService.isLogged()) {
+            // create a Message instance
+            let newMsg: Message = {
+                idUser:     this.authService.getCurrentUserId(),
+                timestamp:  Date.now(),
+                text:       msg   
+            };
+            return this.cache.sendMessage(newMsg);
+        }
+
+        return false;
     };
-} 
+}

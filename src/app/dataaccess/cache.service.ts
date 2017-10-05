@@ -21,8 +21,8 @@ export class CacheService {
     storage         = window.localStorage;
     
     // data
-    users:      User[]      = [];
-    messages:   Message[]   = [];
+    private users:      User[]      = [];
+    private messages:   Message[]   = [];
 
     // subjects
     newMessageReceived      = new Subject();
@@ -131,7 +131,7 @@ export class CacheService {
             console.error("Couldn't create user because of cache lock");
         }
 
-        return res
+        return res;
     };
     private getUserFrom(key: string, value: any): User{
         let user:User = null;
