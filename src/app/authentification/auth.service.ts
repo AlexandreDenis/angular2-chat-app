@@ -6,8 +6,8 @@ import { EncryptionService }    from './encryption.service';
 
 @Injectable()
 export class AuthService {
-    isLoggedIn:boolean  = false;
-    idUser: number      = -1;
+    private isLoggedIn:boolean  = false;
+    private idUser: number      = -1;
 
     constructor(
         private cache: CacheService,
@@ -18,7 +18,10 @@ export class AuthService {
         return this.cache.isUserAlreadyExisting(username);
     };
 
-    createUser(userInfo: User) {
+    createUser(userInfo: User): boolean {
+        if(this.isUserAlreadyExisting(userInfo.username))
+            return false;
+
         // encrypt the password
         userInfo.password   = this.encryption.encrypt(userInfo.password);
 
@@ -46,6 +49,10 @@ export class AuthService {
         this.isLoggedIn     = false;
         this.idUser         = -1;
     };
+
+    isLogged(): boolean {
+        return this.isLoggedIn;
+    }
 
     getCurrentUserId(): number {
         return this.idUser;
